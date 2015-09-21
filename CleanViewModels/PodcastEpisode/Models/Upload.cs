@@ -10,12 +10,19 @@ namespace CleanViewModels.PodcastEpisode.Models
 {
     public class Upload
     {
+        private readonly IUploadService _uploadService;
+
         private Observable<string> _title = new Observable<string>();
         private Observable<Genre> _genre = new Observable<Genre>();
         private Observable<ArtworkSource> _artworkSource = new Observable<ArtworkSource>();
         private Observable<string> _artworkFile = new Observable<string>();
         private Observable<Uri> _artworkUrl = new Observable<Uri>();
         
+        public Upload(IUploadService uploadService)
+        {
+            _uploadService = uploadService;
+        }
+
         public string Title
         {
             get { return _title; }
@@ -44,6 +51,11 @@ namespace CleanViewModels.PodcastEpisode.Models
         {
             get { return _artworkUrl; }
             set { _artworkUrl.Value = value; }
+        }
+
+        public async Task ExecuteAsync()
+        {
+            await _uploadService.UploadAsync(this);
         }
     }
 }

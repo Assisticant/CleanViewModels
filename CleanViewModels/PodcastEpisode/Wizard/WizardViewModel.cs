@@ -6,14 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics.Contracts;
-using CleanViewModels.PodcastEpisode.Services;
-
 namespace CleanViewModels.PodcastEpisode.Wizard
 {
     public class WizardViewModel
     {
-        private readonly IUploadService _uploadService;
-
         private readonly Upload _upload;
         private readonly TitleViewModel _title;
         private readonly FileViewModel _file;
@@ -26,25 +22,18 @@ namespace CleanViewModels.PodcastEpisode.Wizard
 
         public WizardViewModel(
             Upload upload,
-            IUploadService uploadService,
             Func<Upload, TitleViewModel> makeTitle,
             Func<Upload, FileViewModel> makeFile,
             Func<Upload, UrlViewModel> makeUrl,
             Func<Upload, ReviewViewModel> makeReview)
         {
             _upload = upload;
-            _uploadService = uploadService;
             _title = makeTitle(upload);
             _file = makeFile(upload);
             _url = makeUrl(upload);
             _review = makeReview(upload);
 
             _currentPage.Value = _title;
-        }
-
-        public async Task LoadAsync()
-        {
-            await _title.LoadAsync();
         }
 
         public object CurrentPage
@@ -121,7 +110,7 @@ namespace CleanViewModels.PodcastEpisode.Wizard
         {
             Contract.Requires(CanFinish);
 
-            await _uploadService.UploadAsync(_upload);
+            await _upload.ExecuteAsync();
             if (Closed != null)
                 Closed(this, new EventArgs());
         }

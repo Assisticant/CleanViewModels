@@ -22,11 +22,6 @@ namespace CleanViewModels.PodcastEpisode.Wizard
             _genreRepository = genreRepository;
         }
 
-        public async Task LoadAsync()
-        {
-            await _genreRepository.LoadAsync();
-        }
-
         public string Title
         {
             get { return _upload.Title; }

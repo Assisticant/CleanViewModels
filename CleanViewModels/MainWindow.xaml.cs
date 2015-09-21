@@ -31,9 +31,8 @@ namespace CleanViewModels
         private void LaunchWizard(object sender, RoutedEventArgs e)
         {
             // Create the model and inject it into the view models.
-            var upload = new Upload();
+            var upload = new Upload(_uploadService);
             var viewModel = _makeWizardViewModel(upload);
-            viewModel.LoadAsync();
 
             // Show the dialog with the view models.
             var dialog = new WizardDialog();
