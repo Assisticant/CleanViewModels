@@ -98,8 +98,7 @@ namespace CleanViewModels.Tests
 
         private WizardViewModel GivenMinimalViewModel()
         {
-            var fakeUploadService = new FakeUploadService();
-            var upload = new Upload(fakeUploadService);
+            var upload = new Upload();
             var fakeGenreRepository = new FakeGenreRepository();
             var viewModel = new WizardViewModel(upload,
                 u => new TitleViewModel(u, fakeGenreRepository),

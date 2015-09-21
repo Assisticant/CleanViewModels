@@ -24,10 +24,11 @@ namespace CleanViewModels.PodcastEpisode.Wizard
                 vm.Closed += ViewModel_Close);
         }
 
-        private void ViewModel_Close(object sender, EventArgs e)
+        private void ViewModel_Close(object sender, DialogClosedEventArgs e)
         {
             ForView.Unwrap<WizardViewModel>(DataContext, vm =>
                 vm.Closed -= ViewModel_Close);
+            DialogResult = e.Finished;
             Close();
         }
     }

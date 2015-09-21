@@ -1,8 +1,18 @@
 ﻿<Window x:Class="CleanViewModels.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:itzben="clr-namespace:Itzben;assembly=Itzben"
         Title="MainWindow" Height="350" Width="525">
+    <Window.Resources>
+        <itzben:VisibleWhenTrueConverter x:Key="VisibleWhenTrue"/>
+    </Window.Resources>
     <Grid>
+        <TextBlock Text="..." HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="Blue" FontWeight="ExtraBold" FontSize="30" Margin="5" Visibility="{Binding IsBusy, Converter={StaticResource VisibleWhenTrue}}"/>
+        <TextBlock Text="!" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="Red" FontWeight="ExtraBold" FontSize="30" Margin="5" Visibility="{Binding HasError, Converter={StaticResource VisibleWhenTrue}}">
+            <FrameworkElement.ToolTip>
+                <ToolTip Content="{Binding LastError}"/>
+            </FrameworkElement.ToolTip>
+        </TextBlock>
         <Button HorizontalAlignment="Center" VerticalAlignment="Center" Width="70" Height="30" Content="Wizard" Click="LaunchWizard"/>
     </Grid>
 </Window>

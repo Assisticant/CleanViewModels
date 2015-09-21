@@ -18,7 +18,7 @@ namespace CleanViewModels.PodcastEpisode.Wizard
 
         private Observable<object> _currentPage = new Observable<object>();
         
-        public event EventHandler Closed;
+        public event DialogClosedHandler Closed;
 
         public WizardViewModel(
             Upload upload,
@@ -106,19 +106,18 @@ namespace CleanViewModels.PodcastEpisode.Wizard
             }
         }
 
-        public async void Finish()
+        public void Finish()
         {
             Contract.Requires(CanFinish);
 
-            await _upload.ExecuteAsync();
             if (Closed != null)
-                Closed(this, new EventArgs());
+                Closed(this, new DialogClosedEventArgs { Finished = true });
         }
 
         public void Cancel()
         {
             if (Closed != null)
-                Closed(this, new EventArgs());
+                Closed(this, new DialogClosedEventArgs { Finished = false });
         }
     }
 }

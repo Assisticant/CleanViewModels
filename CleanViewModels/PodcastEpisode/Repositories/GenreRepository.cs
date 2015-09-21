@@ -14,17 +14,12 @@ namespace CleanViewModels.PodcastEpisode.Repositories
 
         public ObservableCollection<Genre> Genres
         {
-            get
-            {
-                if (!_genres.Any())
-                    LoadAsync();
-                return _genres;
-            }
+            get { return _genres; }
         }
 
-        private async void LoadAsync()
+        public async Task LoadAsync()
         {
-            //await Task.Delay(3000);
+            await Task.Delay(3000);
             _genres.Clear();
             _genres.Add(new Genre(1) { Name = "Comedy" });
             _genres.Add(new Genre(2) { Name = "Technology" });

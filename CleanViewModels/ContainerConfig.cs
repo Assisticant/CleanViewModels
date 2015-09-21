@@ -18,6 +18,10 @@ namespace CleanViewModels
         {
             ContainerBuilder builder = new ContainerBuilder();
 
+            builder.RegisterType<ServiceManager>()
+                .AsSelf()
+                .AsImplementedInterfaces()
+                .SingleInstance();
             builder.RegisterType<GenreRepository>()
                 .AsSelf()
                 .AsImplementedInterfaces()
@@ -27,6 +31,7 @@ namespace CleanViewModels
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
+            builder.RegisterType<MainViewModel>().AsSelf();
             builder.RegisterType<TitleViewModel>().AsSelf();
             builder.RegisterType<FileViewModel>().AsSelf();
             builder.RegisterType<UrlViewModel>().AsSelf();

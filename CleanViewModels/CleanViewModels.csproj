@@ -75,9 +75,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="IServiceStatus.cs" />
+    <Compile Include="MainViewModel.cs" />
     <Compile Include="PodcastEpisode\Repositories\IGenreRepository.cs" />
     <Compile Include="PodcastEpisode\Services\IUploadService.cs" />
     <Compile Include="PodcastEpisode\Services\UploadService.cs" />
+    <Compile Include="PodcastEpisode\Wizard\DialogClosedEventArgs.cs" />
+    <Compile Include="ServiceManager.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

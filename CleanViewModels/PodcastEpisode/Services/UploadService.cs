@@ -12,7 +12,7 @@ namespace CleanViewModels.PodcastEpisode.Services
         public async Task UploadAsync(Upload upload)
         {
             await Task.Delay(5000);
-            //throw new ApplicationException("Failed to upload");
+            throw new ApplicationException("Failed to upload");
         }
     }
 }

@@ -7,7 +7,7 @@ using CleanViewModels.PodcastEpisode.Models;
 
 namespace CleanViewModels.PodcastEpisode.Services
 {
-    public interface IUploadService
+    interface IUploadService
     {
         Task UploadAsync(Upload upload);
     }

@@ -1,7 +1,4 @@
 ﻿using Assisticant;
-using CleanViewModels.PodcastEpisode.Models;
-using CleanViewModels.PodcastEpisode.Services;
-using CleanViewModels.PodcastEpisode.Wizard;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,28 +13,20 @@ namespace CleanViewModels
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly Func<Upload, WizardViewModel> _makeWizardViewModel;
-        private readonly IUploadService _uploadService;
+        private readonly ServiceManager _serviceManager;
 
         public MainWindow()
         {
             InitializeComponent();
 
             ContainerConfig container = new ContainerConfig();
-            _makeWizardViewModel = container.Resolve<Func<Upload, WizardViewModel>>();
-            _uploadService = container.Resolve<IUploadService>();
+            _serviceManager = container.Resolve<ServiceManager>();
+            DataContext = ForView.Wrap(container.Resolve<MainViewModel>());
         }
 
         private void LaunchWizard(object sender, RoutedEventArgs e)
         {
-            // Create the model and inject it into the view models.
-            var upload = new Upload(_uploadService);
-            var viewModel = _makeWizardViewModel(upload);
-
-            // Show the dialog with the view models.
-            var dialog = new WizardDialog();
-            dialog.DataContext = ForView.Wrap(viewModel);
-            dialog.ShowDialog();
+            _serviceManager.RunWizard();
         }
     }
 }
