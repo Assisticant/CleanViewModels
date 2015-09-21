@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanViewModels", "CleanViewModels\CleanViewModels.csproj", "{48B757FB-56F3-4D9F-BF6F-D7D53F0B0509}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanViewModels.Tests", "CleanViewModels.Tests\CleanViewModels.Tests.csproj", "{F684A672-F56E-41FB-B036-9C2B5C923C7C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{48B757FB-56F3-4D9F-BF6F-D7D53F0B0509}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48B757FB-56F3-4D9F-BF6F-D7D53F0B0509}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48B757FB-56F3-4D9F-BF6F-D7D53F0B0509}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F684A672-F56E-41FB-B036-9C2B5C923C7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F684A672-F56E-41FB-B036-9C2B5C923C7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F684A672-F56E-41FB-B036-9C2B5C923C7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F684A672-F56E-41FB-B036-9C2B5C923C7C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

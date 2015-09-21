@@ -1,0 +1,34 @@
+﻿<Window x:Class="CleanViewModels.PodcastEpisode.Wizard.WizardDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:CleanViewModels.PodcastEpisode.Wizard"
+        Title="Podcast Upload Wizard" Height="416" Width="632"
+        Loaded="Window_Loaded">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type local:TitleViewModel}">
+            <local:TitleUserControl/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local:FileViewModel}">
+            <local:FileUserControl/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local:UrlViewModel}">
+            <local:UrlUserControl/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local:ReviewViewModel}">
+            <local:ReviewUserControl/>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ContentPresenter Content="{Binding CurrentPage}" />
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Width="70" Margin="5" Content="&lt;&lt; Back" Command="{Binding GoBack}"/>
+            <Button Width="70" Margin="5" Content="Next &gt;&gt;" Command="{Binding GoForward}"/>
+            <Button Width="70" Margin="5" Content="Finish" Command="{Binding Finish}"/>
+            <Button Width="70" Margin="5"  Content="Cancel" Command="{Binding Cancel}"/>
+        </StackPanel>
+    </Grid>
+</Window>

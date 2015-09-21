@@ -35,8 +35,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Itzben, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\itzben.1.1.1\lib\NET45\Itzben.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.1.37\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -54,6 +67,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="MVVM\RelayCommand.cs" />
+    <Compile Include="PodcastEpisode\Repositories\IGenreRepository.cs" />
+    <Compile Include="PodcastEpisode\Services\IUploadService.cs" />
+    <Compile Include="PodcastEpisode\Services\UploadService.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -62,12 +79,58 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ContainerConfig.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="PodcastEpisode\Wizard\FileUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PodcastEpisode\Wizard\ReviewUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PodcastEpisode\Wizard\TitleUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PodcastEpisode\Wizard\UrlUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PodcastEpisode\Wizard\WizardDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PodcastEpisode\Models\ArtworkSource.cs" />
+    <Compile Include="PodcastEpisode\Models\Genre.cs" />
+    <Compile Include="PodcastEpisode\Models\Upload.cs" />
+    <Compile Include="PodcastEpisode\Repositories\GenreRepository.cs" />
+    <Compile Include="PodcastEpisode\Wizard\FileUserControl.xaml.cs">
+      <DependentUpon>FileUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PodcastEpisode\Wizard\FileViewModel.cs" />
+    <Compile Include="PodcastEpisode\Wizard\ReviewUserControl.xaml.cs">
+      <DependentUpon>ReviewUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PodcastEpisode\Wizard\ReviewViewModel.cs" />
+    <Compile Include="PodcastEpisode\Wizard\TitleUserControl.xaml.cs">
+      <DependentUpon>TitleUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PodcastEpisode\Wizard\TitleViewModel.cs" />
+    <Compile Include="PodcastEpisode\Wizard\UrlUserControl.xaml.cs">
+      <DependentUpon>UrlUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PodcastEpisode\Wizard\UrlViewModel.cs" />
+    <Compile Include="MVVM\ViewModelBase.cs" />
+    <Compile Include="PodcastEpisode\Wizard\WizardDialog.xaml.cs">
+      <DependentUpon>WizardDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PodcastEpisode\Wizard\WizardViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -85,6 +148,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -94,6 +158,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
