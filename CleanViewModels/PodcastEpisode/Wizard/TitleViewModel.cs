@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CleanViewModels.PodcastEpisode.Wizard
 {
-    public class TitleViewModel
+    public class TitleViewModel : IPage
     {
         private readonly Upload _upload;
         private readonly IGenreRepository _genreRepository;
@@ -23,6 +23,11 @@ namespace CleanViewModels.PodcastEpisode.Wizard
             _upload = upload;
             _genreRepository = genreRepository;
             _makeGenreViewModel = makeGenreViewModel;
+        }
+
+        public bool Active
+        {
+            get { return true; }
         }
 
         public string Title

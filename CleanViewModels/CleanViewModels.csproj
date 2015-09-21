@@ -126,6 +126,7 @@
       <DependentUpon>FileUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="PodcastEpisode\Wizard\FileViewModel.cs" />
+    <Compile Include="PodcastEpisode\Wizard\IPage.cs" />
     <Compile Include="PodcastEpisode\Wizard\ReviewUserControl.xaml.cs">
       <DependentUpon>ReviewUserControl.xaml</DependentUpon>
     </Compile>

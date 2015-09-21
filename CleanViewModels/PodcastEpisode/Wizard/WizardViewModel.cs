@@ -11,12 +11,9 @@ namespace CleanViewModels.PodcastEpisode.Wizard
     public class WizardViewModel
     {
         private readonly Upload _upload;
-        private readonly TitleViewModel _title;
-        private readonly FileViewModel _file;
-        private readonly UrlViewModel _url;
-        private readonly ReviewViewModel _review;
+        private readonly IPage[] _pages;
 
-        private Observable<object> _currentPage = new Observable<object>();
+        private Observable<int> _currentPageIndex = new Observable<int>();
         
         public event DialogClosedHandler Closed;
 
@@ -28,82 +25,53 @@ namespace CleanViewModels.PodcastEpisode.Wizard
             Func<Upload, ReviewViewModel> makeReview)
         {
             _upload = upload;
-            _title = makeTitle(upload);
-            _file = makeFile(upload);
-            _url = makeUrl(upload);
-            _review = makeReview(upload);
-
-            _currentPage.Value = _title;
+            _pages = new IPage[]
+            {
+                makeTitle(upload),
+                makeFile(upload),
+                makeUrl(upload),
+                makeReview(upload)
+            };
         }
 
-        public object CurrentPage
+        public IPage CurrentPage
         {
-            get { return _currentPage.Value; }
+            get { return _pages[_currentPageIndex]; }
         }
 
         public bool CanGoBack
         {
-            get { return _currentPage.Value != _title; }
+            get { return _pages.Take(_currentPageIndex).Any(p => p.Active); }
         }
 
         public void GoBack()
         {
             Contract.Requires(CanGoBack);
 
-            var currentPage = _currentPage.Value;
-            object priorPage = null;
-            if (currentPage == _file || CurrentPage == _url)
-                priorPage = _title;
-            else if (currentPage == _review)
-            {
-                if (_upload.ArtworkSource == ArtworkSource.File)
-                    priorPage = _file;
-                else if (_upload.ArtworkSource == ArtworkSource.Url)
-                    priorPage = _url;
-                else
-                    priorPage = _title;
-            }
-            _currentPage.Value = priorPage;
+            int index = _currentPageIndex - 1;
+            while (!_pages[index].Active)
+                index--;
+            _currentPageIndex.Value = index;
         }
 
         public bool CanGoForward
         {
-            get { return _currentPage.Value != _review; }
+            get { return _pages.Skip(_currentPageIndex + 1).Any(p => p.Active); }
         }
 
         public void GoForward()
         {
             Contract.Requires(CanGoForward);
 
-            var currentPage = _currentPage.Value;
-            object nextPage = null;
-            if (currentPage == _title)
-            {
-                if (_upload.ArtworkSource == ArtworkSource.File)
-                    nextPage = _file;
-                else if (_upload.ArtworkSource == ArtworkSource.Url)
-                    nextPage = _url;
-                else
-                    nextPage = _review;
-            }
-            if (currentPage == _file || CurrentPage == _url)
-                nextPage = _review;
-            _currentPage.Value = nextPage;
+            int index = _currentPageIndex + 1;
+            while (!_pages[index].Active)
+                index++;
+            _currentPageIndex.Value = index;
         }
 
         public bool CanFinish
         {
-            get
-            {
-                return
-                    !string.IsNullOrWhiteSpace(_upload.Title) &&
-                    _upload.Genre != null &&
-                    (_upload.ArtworkSource == ArtworkSource.File ?
-                        !string.IsNullOrWhiteSpace(_upload.ArtworkFile) :
-                     _upload.ArtworkSource == ArtworkSource.Url ?
-                        _upload.ArtworkUrl != null :
-                        true);
-            }
+            get { return _upload.IsComplete; }
         }
 
         public void Finish()

@@ -7,13 +7,18 @@ using System.Threading.Tasks;
 
 namespace CleanViewModels.PodcastEpisode.Wizard
 {
-    public class UrlViewModel
+    public class UrlViewModel : IPage
     {
         private readonly Upload _upload;
 
         public UrlViewModel(Upload upload)
         {
             _upload = upload;
+        }
+
+        public bool Active
+        {
+            get { return _upload.ArtworkSource == ArtworkSource.Url; }
         }
 
         public string ArtworkUrl

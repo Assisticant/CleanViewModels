@@ -7,13 +7,18 @@ using System.Threading.Tasks;
 
 namespace CleanViewModels.PodcastEpisode.Wizard
 {
-    public class ReviewViewModel
+    public class ReviewViewModel : IPage
     {
         private readonly Upload _upload;
 
         public ReviewViewModel(Upload upload)
         {
             _upload = upload;
+        }
+
+        public bool Active
+        {
+            get { return true; }
         }
 
         public string Title

@@ -44,5 +44,20 @@ namespace CleanViewModels.PodcastEpisode.Models
             get { return _artworkUrl; }
             set { _artworkUrl.Value = value; }
         }
+
+        public bool IsComplete
+        {
+            get
+            {
+                return
+                    !string.IsNullOrWhiteSpace(Title) &&
+                    Genre != null &&
+                    (ArtworkSource == ArtworkSource.File ?
+                        !string.IsNullOrWhiteSpace(ArtworkFile) :
+                     ArtworkSource == ArtworkSource.Url ?
+                        ArtworkUrl != null :
+                        true);
+            }
+        }
     }
 }
