@@ -2,7 +2,7 @@
 using CleanViewModels.PodcastEpisode.Repositories;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,13 +13,16 @@ namespace CleanViewModels.PodcastEpisode.Wizard
     {
         private readonly Upload _upload;
         private readonly IGenreRepository _genreRepository;
+        private readonly Func<Genre, GenreViewModel> _makeGenreViewModel;
         
         public TitleViewModel(
             Upload upload, 
-            IGenreRepository genreRepository)
+            IGenreRepository genreRepository, 
+            Func<Genre, GenreViewModel> makeGenreViewModel)
         {
             _upload = upload;
             _genreRepository = genreRepository;
+            _makeGenreViewModel = makeGenreViewModel;
         }
 
         public string Title
@@ -28,15 +31,30 @@ namespace CleanViewModels.PodcastEpisode.Wizard
             set { _upload.Title = value; }
         }
 
-        public Genre Genre
+        public GenreViewModel Genre
         {
-            get { return _upload.Genre; }
-            set { _upload.Genre = value; }
+            get
+            {
+                return _upload.Genre == null ? null :
+                    _makeGenreViewModel(_upload.Genre);
+            }
+            set
+            {
+                _upload.Genre = value == null ? null :
+                    value.Genre;
+            }
         }
 
-        public ObservableCollection<Genre> Genres
+        public ImmutableList<GenreViewModel> Genres
         {
-            get { return _genreRepository.Genres; }
+            get
+            {
+                var genres =
+                    from genre in _genreRepository.Genres
+                    orderby genre.Name
+                    select _makeGenreViewModel(genre);
+                return genres.ToImmutableList();
+            }
         }
 
         public int ArtworkSource

@@ -33,6 +33,7 @@ namespace CleanViewModels
 
             builder.RegisterType<MainViewModel>().AsSelf();
             builder.RegisterType<TitleViewModel>().AsSelf();
+            builder.RegisterType<GenreViewModel>().AsSelf();
             builder.RegisterType<FileViewModel>().AsSelf();
             builder.RegisterType<UrlViewModel>().AsSelf();
             builder.RegisterType<ReviewViewModel>().AsSelf();

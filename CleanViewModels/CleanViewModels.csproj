@@ -81,6 +81,7 @@
     <Compile Include="PodcastEpisode\Services\IUploadService.cs" />
     <Compile Include="PodcastEpisode\Services\UploadService.cs" />
     <Compile Include="PodcastEpisode\Wizard\DialogClosedEventArgs.cs" />
+    <Compile Include="PodcastEpisode\Wizard\GenreViewModel.cs" />
     <Compile Include="ServiceManager.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

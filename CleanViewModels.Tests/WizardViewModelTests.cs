@@ -101,12 +101,13 @@ namespace CleanViewModels.Tests
             var upload = new Upload();
             var fakeGenreRepository = new FakeGenreRepository();
             var viewModel = new WizardViewModel(upload,
-                u => new TitleViewModel(u, fakeGenreRepository),
+                u => new TitleViewModel(u, fakeGenreRepository,
+                    g => new GenreViewModel(g)),
                 u => new FileViewModel(u),
                 u => new UrlViewModel(u),
                 u => new ReviewViewModel(u));
             ((TitleViewModel)viewModel.CurrentPage).Title = "Test";
-            ((TitleViewModel)viewModel.CurrentPage).Genre = new Genre(0);
+            ((TitleViewModel)viewModel.CurrentPage).Genre = new GenreViewModel(new Genre(0));
             return viewModel;
         }
     }
