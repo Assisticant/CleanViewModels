@@ -1,5 +1,4 @@
-﻿using CleanViewModels.MVVM;
-using CleanViewModels.PodcastEpisode.Models;
+﻿using CleanViewModels.PodcastEpisode.Models;
 using CleanViewModels.PodcastEpisode.Repositories;
 using System;
 using System.Collections.Generic;
@@ -10,17 +9,16 @@ using System.Threading.Tasks;
 
 namespace CleanViewModels.PodcastEpisode.Wizard
 {
-    public class TitleViewModel : ViewModelBase
+    public class TitleViewModel
     {
+        private readonly Upload _upload;
         private readonly IGenreRepository _genreRepository;
-
-        private string _title;
-        private Genre _genre;
-        private int _artworkSource;
-
+        
         public TitleViewModel(
+            Upload upload, 
             IGenreRepository genreRepository)
         {
+            _upload = upload;
             _genreRepository = genreRepository;
         }
 
@@ -31,28 +29,14 @@ namespace CleanViewModels.PodcastEpisode.Wizard
 
         public string Title
         {
-            get { return _title; }
-            set
-            {
-                if (_title != value)
-                {
-                    _title = value;
-                    RaisePropertyChanged();
-                }
-            }
+            get { return _upload.Title; }
+            set { _upload.Title = value; }
         }
 
         public Genre Genre
         {
-            get { return _genre; }
-            set
-            {
-                if (_genre != value)
-                {
-                    _genre = value;
-                    RaisePropertyChanged();
-                }
-            }
+            get { return _upload.Genre; }
+            set { _upload.Genre = value; }
         }
 
         public ObservableCollection<Genre> Genres
@@ -62,14 +46,23 @@ namespace CleanViewModels.PodcastEpisode.Wizard
 
         public int ArtworkSource
         {
-            get { return _artworkSource; }
+            get
+            {
+                if (_upload.ArtworkSource == Models.ArtworkSource.File)
+                    return 1;
+                else if (_upload.ArtworkSource == Models.ArtworkSource.Url)
+                    return 2;
+                else
+                    return 0;
+            }
             set
             {
-                if (_artworkSource != value)
-                {
-                    _artworkSource = value;
-                    RaisePropertyChanged();
-                }
+                if (value == 1)
+                    _upload.ArtworkSource = Models.ArtworkSource.File;
+                else if (value == 2)
+                    _upload.ArtworkSource = Models.ArtworkSource.Url;
+                else
+                    _upload.ArtworkSource = 0;
             }
         }
     }

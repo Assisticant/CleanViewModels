@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assisticant;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,12 +20,14 @@ namespace CleanViewModels.PodcastEpisode.Wizard
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            ((WizardViewModel)DataContext).Closed += ViewModel_Close;
+            ForView.Unwrap<WizardViewModel>(DataContext, vm =>
+                vm.Closed += ViewModel_Close);
         }
 
         private void ViewModel_Close(object sender, EventArgs e)
         {
-            ((WizardViewModel)DataContext).Closed -= ViewModel_Close;
+            ForView.Unwrap<WizardViewModel>(DataContext, vm =>
+                vm.Closed -= ViewModel_Close);
             Close();
         }
     }

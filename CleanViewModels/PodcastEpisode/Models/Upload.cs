@@ -1,4 +1,5 @@
-﻿using CleanViewModels.PodcastEpisode.Services;
+﻿using Assisticant.Fields;
+using CleanViewModels.PodcastEpisode.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,40 @@ namespace CleanViewModels.PodcastEpisode.Models
 {
     public class Upload
     {
-        public string Title { get; set; }
-        public Genre Genre { get; set; }
-        public ArtworkSource ArtworkSource { get; set; }
-        public string ArtworkFile { get; set; }
-        public Uri ArtworkUrl { get; set; }
+        private Observable<string> _title = new Observable<string>();
+        private Observable<Genre> _genre = new Observable<Genre>();
+        private Observable<ArtworkSource> _artworkSource = new Observable<ArtworkSource>();
+        private Observable<string> _artworkFile = new Observable<string>();
+        private Observable<Uri> _artworkUrl = new Observable<Uri>();
+        
+        public string Title
+        {
+            get { return _title; }
+            set { _title.Value = value; }
+        }
+
+        public Genre Genre
+        {
+            get { return _genre; }
+            set { _genre.Value = value; }
+        }
+
+        public ArtworkSource ArtworkSource
+        {
+            get { return _artworkSource; }
+            set { _artworkSource.Value = value; }
+        }
+
+        public string ArtworkFile
+        {
+            get { return _artworkFile; }
+            set { _artworkFile.Value = value; }
+        }
+
+        public Uri ArtworkUrl
+        {
+            get { return _artworkUrl; }
+            set { _artworkUrl.Value = value; }
+        }
     }
 }

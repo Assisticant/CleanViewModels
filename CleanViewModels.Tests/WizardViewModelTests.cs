@@ -15,7 +15,7 @@ namespace CleanViewModels.Tests
         public void CanFinishAfterTitleAndGenre()
         {
             var viewModel = GivenMinimalViewModel();
-            viewModel.Finish.CanExecute(null).Should().BeTrue();
+            viewModel.CanFinish.Should().BeTrue();
         }
 
         [TestMethod]
@@ -23,7 +23,7 @@ namespace CleanViewModels.Tests
         {
             var viewModel = GivenMinimalViewModel();
             ((TitleViewModel)viewModel.CurrentPage).Title = null;
-            viewModel.Finish.CanExecute(null).Should().BeFalse();
+            viewModel.CanFinish.Should().BeFalse();
         }
 
         [TestMethod]
@@ -31,14 +31,14 @@ namespace CleanViewModels.Tests
         {
             var viewModel = GivenMinimalViewModel();
             ((TitleViewModel)viewModel.CurrentPage).Genre = null;
-            viewModel.Finish.CanExecute(null).Should().BeFalse();
+            viewModel.CanFinish.Should().BeFalse();
         }
 
         [TestMethod]
         public void ReviewPageIsNextByDefault()
         {
             var viewModel = GivenMinimalViewModel();
-            viewModel.GoForward.Execute(null);
+            viewModel.GoForward();
             viewModel.CurrentPage.Should().BeOfType<ReviewViewModel>();
         }
 
@@ -47,7 +47,7 @@ namespace CleanViewModels.Tests
         {
             var viewModel = GivenMinimalViewModel();
             ((TitleViewModel)viewModel.CurrentPage).ArtworkSource = 1; // File
-            viewModel.GoForward.Execute(null);
+            viewModel.GoForward();
             viewModel.CurrentPage.Should().BeOfType<FileViewModel>();
         }
 
@@ -56,7 +56,7 @@ namespace CleanViewModels.Tests
         {
             var viewModel = GivenMinimalViewModel();
             ((TitleViewModel)viewModel.CurrentPage).ArtworkSource = 2; // Url
-            viewModel.GoForward.Execute(null);
+            viewModel.GoForward();
             viewModel.CurrentPage.Should().BeOfType<UrlViewModel>();
         }
 
@@ -65,7 +65,7 @@ namespace CleanViewModels.Tests
         {
             var viewModel = GivenMinimalViewModel();
             ((TitleViewModel)viewModel.CurrentPage).ArtworkSource = 1; // File
-            viewModel.Finish.CanExecute(null).Should().BeFalse();
+            viewModel.CanFinish.Should().BeFalse();
         }
 
         [TestMethod]
@@ -73,9 +73,9 @@ namespace CleanViewModels.Tests
         {
             var viewModel = GivenMinimalViewModel();
             ((TitleViewModel)viewModel.CurrentPage).ArtworkSource = 1; // File
-            viewModel.GoForward.Execute(null);
+            viewModel.GoForward();
             ((FileViewModel)viewModel.CurrentPage).ArtworkFileName = "C:\artwork.jpg";
-            viewModel.Finish.CanExecute(null).Should().BeTrue();
+            viewModel.CanFinish.Should().BeTrue();
         }
 
         [TestMethod]
@@ -83,7 +83,7 @@ namespace CleanViewModels.Tests
         {
             var viewModel = GivenMinimalViewModel();
             ((TitleViewModel)viewModel.CurrentPage).ArtworkSource = 2; // Url
-            viewModel.Finish.CanExecute(null).Should().BeFalse();
+            viewModel.CanFinish.Should().BeFalse();
         }
 
         [TestMethod]
@@ -91,18 +91,22 @@ namespace CleanViewModels.Tests
         {
             var viewModel = GivenMinimalViewModel();
             ((TitleViewModel)viewModel.CurrentPage).ArtworkSource = 2; // Url
-            viewModel.GoForward.Execute(null);
+            viewModel.GoForward();
             ((UrlViewModel)viewModel.CurrentPage).ArtworkUrl = "http://localhost/artwork.jpg";
-            viewModel.Finish.CanExecute(null).Should().BeTrue();
+            viewModel.CanFinish.Should().BeTrue();
         }
 
         private WizardViewModel GivenMinimalViewModel()
         {
             var fakeUploadService = new FakeUploadService();
+            var upload = new Upload();
             var fakeGenreRepository = new FakeGenreRepository();
-            var viewModel = new WizardViewModel(
-                fakeGenreRepository,
-                fakeUploadService);
+            var viewModel = new WizardViewModel(upload,
+                fakeUploadService,
+                u => new TitleViewModel(u, fakeGenreRepository),
+                u => new FileViewModel(u),
+                u => new UrlViewModel(u),
+                u => new ReviewViewModel(u));
             ((TitleViewModel)viewModel.CurrentPage).Title = "Test";
             ((TitleViewModel)viewModel.CurrentPage).Genre = new Genre(0);
             return viewModel;

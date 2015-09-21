@@ -35,6 +35,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Assisticant, Version=2.3.0.0, Culture=neutral, PublicKeyToken=19e83a8289e31a8f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Assisticant.1.1.4.4\lib\net45\Assisticant.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Assisticant.XAML, Version=2.3.0.0, Culture=neutral, PublicKeyToken=19e83a8289e31a8f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Assisticant.1.1.4.4\lib\net45\Assisticant.XAML.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
       <Private>True</Private>
@@ -67,7 +75,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="MVVM\RelayCommand.cs" />
     <Compile Include="PodcastEpisode\Repositories\IGenreRepository.cs" />
     <Compile Include="PodcastEpisode\Services\IUploadService.cs" />
     <Compile Include="PodcastEpisode\Services\UploadService.cs" />
@@ -126,7 +133,6 @@
       <DependentUpon>UrlUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="PodcastEpisode\Wizard\UrlViewModel.cs" />
-    <Compile Include="MVVM\ViewModelBase.cs" />
     <Compile Include="PodcastEpisode\Wizard\WizardDialog.xaml.cs">
       <DependentUpon>WizardDialog.xaml</DependentUpon>
     </Compile>

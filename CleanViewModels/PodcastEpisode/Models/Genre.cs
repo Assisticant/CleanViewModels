@@ -1,3 +1,4 @@
+using Assisticant.Fields;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ namespace CleanViewModels.PodcastEpisode.Models
     public class Genre
     {
         private readonly int _id;
+        private Observable<string> _name = new Observable<string>();
 
         public Genre(int id)
         {
@@ -19,6 +21,10 @@ namespace CleanViewModels.PodcastEpisode.Models
             get { return _id; }
         }
 
-        public string Name { get; set; }
+        public string Name
+        {
+            get { return _name; }
+            set { _name.Value = value; }
+        }
     }
 }

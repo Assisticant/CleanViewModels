@@ -1,4 +1,4 @@
-﻿using CleanViewModels.MVVM;
+﻿using CleanViewModels.PodcastEpisode.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,20 +7,27 @@ using System.Threading.Tasks;
 
 namespace CleanViewModels.PodcastEpisode.Wizard
 {
-    public class UrlViewModel : ViewModelBase
+    public class UrlViewModel
     {
-        private string _artworkUrl;
+        private readonly Upload _upload;
+
+        public UrlViewModel(Upload upload)
+        {
+            _upload = upload;
+        }
 
         public string ArtworkUrl
         {
-            get { return _artworkUrl; }
+            get
+            {
+                return _upload.ArtworkUrl == null ? "" :
+                    _upload.ArtworkUrl.AbsoluteUri;
+            }
             set
             {
-                if (_artworkUrl != value)
-                {
-                    _artworkUrl = value;
-                    RaisePropertyChanged();
-                }
+                Uri uri;
+                if (Uri.TryCreate(value, UriKind.Absolute, out uri))
+                    _upload.ArtworkUrl = uri;
             }
         }
     }

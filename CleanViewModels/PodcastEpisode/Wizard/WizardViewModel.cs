@@ -1,4 +1,5 @@
-﻿using CleanViewModels.PodcastEpisode.Models;
+﻿using Assisticant.Fields;
+using CleanViewModels.PodcastEpisode.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,51 +7,39 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics.Contracts;
 using CleanViewModels.PodcastEpisode.Services;
-using CleanViewModels.PodcastEpisode.Repositories;
-using CleanViewModels.MVVM;
-using System.Windows.Input;
-using System.ComponentModel;
+
 namespace CleanViewModels.PodcastEpisode.Wizard
 {
-    public class WizardViewModel : ViewModelBase
+    public class WizardViewModel
     {
         private readonly IUploadService _uploadService;
 
+        private readonly Upload _upload;
         private readonly TitleViewModel _title;
         private readonly FileViewModel _file;
         private readonly UrlViewModel _url;
         private readonly ReviewViewModel _review;
 
-        private readonly RelayCommand _goBack;
-        private readonly RelayCommand _goForward;
-        private readonly RelayCommand _finish;
-        private readonly RelayCommand _cancel;
+        private Observable<object> _currentPage = new Observable<object>();
         
-        private object _currentPage;
-
         public event EventHandler Closed;
 
         public WizardViewModel(
-            IGenreRepository genreRepository,
-            IUploadService uploadService)
+            Upload upload,
+            IUploadService uploadService,
+            Func<Upload, TitleViewModel> makeTitle,
+            Func<Upload, FileViewModel> makeFile,
+            Func<Upload, UrlViewModel> makeUrl,
+            Func<Upload, ReviewViewModel> makeReview)
         {
+            _upload = upload;
             _uploadService = uploadService;
+            _title = makeTitle(upload);
+            _file = makeFile(upload);
+            _url = makeUrl(upload);
+            _review = makeReview(upload);
 
-            _title = new TitleViewModel(genreRepository);
-            _file = new FileViewModel();
-            _url = new UrlViewModel();
-            _review = new ReviewViewModel();
-
-            _title.PropertyChanged += PagePropertyChanged;
-            _file.PropertyChanged += PagePropertyChanged;
-            _url.PropertyChanged += PagePropertyChanged;
-
-            _goBack = new RelayCommand(DoGoBack);
-            _goForward = new RelayCommand(DoGoForward);
-            _finish = new RelayCommand(DoFinish);
-            _cancel = new RelayCommand(DoCancel);
-
-            _currentPage = _title;
+            _currentPage.Value = _title;
         }
 
         public async Task LoadAsync()
@@ -60,134 +49,87 @@ namespace CleanViewModels.PodcastEpisode.Wizard
 
         public object CurrentPage
         {
-            get { return _currentPage; }
-            set
-            {
-                if (_currentPage != value)
-                {
-                    _currentPage = value;
-                    RaisePropertyChanged();
-                }
-            }
+            get { return _currentPage.Value; }
         }
 
-        public ICommand GoBack
+        public bool CanGoBack
         {
-            get { return _goBack; }
+            get { return _currentPage.Value != _title; }
         }
 
-        public ICommand GoForward
+        public void GoBack()
         {
-            get { return _goForward; }
-        }
+            Contract.Requires(CanGoBack);
 
-        public ICommand Finish
-        {
-            get { return _finish; }
-        }
-
-        public ICommand Cancel
-        {
-            get { return _cancel; }
-        }
-
-        private void DoGoBack()
-        {
-            var currentPage = CurrentPage;
+            var currentPage = _currentPage.Value;
             object priorPage = null;
             if (currentPage == _file || CurrentPage == _url)
                 priorPage = _title;
             else if (currentPage == _review)
             {
-                if (_title.ArtworkSource == 1)
+                if (_upload.ArtworkSource == ArtworkSource.File)
                     priorPage = _file;
-                else if (_title.ArtworkSource == 2)
+                else if (_upload.ArtworkSource == ArtworkSource.Url)
                     priorPage = _url;
                 else
                     priorPage = _title;
             }
-            CurrentPage = priorPage;
-            UpdateButtons();
+            _currentPage.Value = priorPage;
         }
 
-        private void DoGoForward()
+        public bool CanGoForward
         {
-            var currentPage = CurrentPage;
+            get { return _currentPage.Value != _review; }
+        }
+
+        public void GoForward()
+        {
+            Contract.Requires(CanGoForward);
+
+            var currentPage = _currentPage.Value;
             object nextPage = null;
             if (currentPage == _title)
             {
-                if (_title.ArtworkSource == 1)
+                if (_upload.ArtworkSource == ArtworkSource.File)
                     nextPage = _file;
-                else if (_title.ArtworkSource == 2)
+                else if (_upload.ArtworkSource == ArtworkSource.Url)
                     nextPage = _url;
                 else
                     nextPage = _review;
             }
             if (currentPage == _file || CurrentPage == _url)
                 nextPage = _review;
-            CurrentPage = nextPage;
-            UpdateButtons();
+            _currentPage.Value = nextPage;
         }
 
-        private async void DoFinish()
+        public bool CanFinish
         {
-            Uri artworkUrl;
-            if (!Uri.TryCreate(_url.ArtworkUrl, UriKind.Absolute, out artworkUrl))
-                artworkUrl = null;
-            var upload = new Upload()
+            get
             {
-                Title = _title.Title,
-                Genre = _title.Genre,
-                ArtworkSource =
-                    _title.ArtworkSource == 1 ? ArtworkSource.File :
-                    _title.ArtworkSource == 2 ? ArtworkSource.Url :
-                    ArtworkSource.None,
-                ArtworkFile = _file.ArtworkFileName,
-                ArtworkUrl = artworkUrl
-            };
-            await _uploadService.UploadAsync(upload);
-            if (Closed != null)
-                Closed(this, new EventArgs());
-        }
-
-        private void DoCancel()
-        {
-            if (Closed != null)
-                Closed(this, new EventArgs());
-        }
-
-        private void PagePropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            UpdateButtons();
-
-            if (e.PropertyName == "Title")
-                _review.Title = _title.Title;
-            else if (e.PropertyName == "Genre")
-                _review.Genre = _title.Genre == null ? "Not Selected" :
-                    _title.Genre.Name;
-            else if (e.PropertyName == "ArtworkFileName")
-                _review.ArtworkFileName = _file.ArtworkFileName;
-            else if (e.PropertyName == "ArtworkUrl")
-                _review.ArtworkUrl = _url.ArtworkUrl;
-            else if (e.PropertyName == "ArtworkSource")
-            {
-                _review.IsArtworkFile = _title.ArtworkSource == 1;
-                _review.IsArtworkUrl = _title.ArtworkSource == 2;
+                return
+                    !string.IsNullOrWhiteSpace(_upload.Title) &&
+                    _upload.Genre != null &&
+                    (_upload.ArtworkSource == ArtworkSource.File ?
+                        !string.IsNullOrWhiteSpace(_upload.ArtworkFile) :
+                     _upload.ArtworkSource == ArtworkSource.Url ?
+                        _upload.ArtworkUrl != null :
+                        true);
             }
         }
 
-        private void UpdateButtons()
+        public async void Finish()
         {
-            _goBack.SetCanExecute(CurrentPage != _title);
-            _goForward.SetCanExecute(CurrentPage != _review);
-            _finish.SetCanExecute(
-                !string.IsNullOrWhiteSpace(_title.Title) &&
-                _title.Genre != null &&
-                (_title.ArtworkSource == 1 ?
-                    !string.IsNullOrWhiteSpace(_file.ArtworkFileName) :
-                    _title.ArtworkSource == 2 ?
-                    !string.IsNullOrWhiteSpace(_url.ArtworkUrl) :
-                    true));
+            Contract.Requires(CanFinish);
+
+            await _uploadService.UploadAsync(_upload);
+            if (Closed != null)
+                Closed(this, new EventArgs());
+        }
+
+        public void Cancel()
+        {
+            if (Closed != null)
+                Closed(this, new EventArgs());
         }
     }
 }

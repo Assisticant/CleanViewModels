@@ -1,4 +1,5 @@
-﻿using CleanViewModels.PodcastEpisode.Models;
+﻿using Assisticant;
+using CleanViewModels.PodcastEpisode.Models;
 using CleanViewModels.PodcastEpisode.Services;
 using CleanViewModels.PodcastEpisode.Wizard;
 using System;
@@ -36,7 +37,7 @@ namespace CleanViewModels
 
             // Show the dialog with the view models.
             var dialog = new WizardDialog();
-            dialog.DataContext = viewModel;
+            dialog.DataContext = ForView.Wrap(viewModel);
             dialog.ShowDialog();
         }
     }

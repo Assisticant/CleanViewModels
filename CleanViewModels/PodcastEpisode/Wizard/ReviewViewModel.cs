@@ -1,5 +1,4 @@
-﻿using CleanViewModels.MVVM;
-using CleanViewModels.PodcastEpisode.Models;
+﻿using CleanViewModels.PodcastEpisode.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,90 +7,43 @@ using System.Threading.Tasks;
 
 namespace CleanViewModels.PodcastEpisode.Wizard
 {
-    public class ReviewViewModel : ViewModelBase
+    public class ReviewViewModel
     {
-        private string _title;
-        private string _genre;
-        private bool _isArtworkFile;
-        private string _artworkFileName;
-        private bool _isArtworkUrl;
-        private string _artworkUrl;
+        private readonly Upload _upload;
+
+        public ReviewViewModel(Upload upload)
+        {
+            _upload = upload;
+        }
 
         public string Title
         {
-            get { return _title; }
-            set
-            {
-                if (_title != value)
-                {
-                    _title = value;
-                    RaisePropertyChanged();
-                }
-            }
+            get { return _upload.Title; }
         }
 
         public string Genre
         {
-            get { return _genre; }
-            set
-            {
-                if (_genre != value)
-                {
-                    _genre = value;
-                    RaisePropertyChanged();
-                }
-            }
+            get { return _upload.Genre == null ? "Not selected" : _upload.Genre.Name; }
         }
 
         public bool IsArtworkFile
         {
-            get { return _isArtworkFile; }
-            set
-            {
-                if (_isArtworkFile != value)
-                {
-                    _isArtworkFile = value;
-                    RaisePropertyChanged();
-                }
-            }
+            get { return _upload.ArtworkSource == ArtworkSource.File; }
         }
 
         public string ArtworkFileName
         {
-            get { return _artworkFileName; }
-            set
-            {
-                if (_artworkFileName != value)
-                {
-                    _artworkFileName = value;
-                    RaisePropertyChanged();
-                }
-            }
+            get { return _upload.ArtworkFile; }
         }
+
         public bool IsArtworkUrl
         {
-            get { return _isArtworkUrl; }
-            set
-            {
-                if (_isArtworkFile != value)
-                {
-                    _isArtworkUrl = value;
-                    RaisePropertyChanged();
-                }
-            }
+            get { return _upload.ArtworkSource == ArtworkSource.Url; }
         }
 
         public string ArtworkUrl
         {
-            get { return _artworkUrl; }
-            set
-            {
-                if (_artworkUrl != value)
-                {
-                    _artworkUrl = value;
-                    RaisePropertyChanged();
-                }
-            }
+            get { return _upload.ArtworkUrl == null ? "Not selected" : _upload.ArtworkUrl.AbsoluteUri; }
         }
     }
 }
